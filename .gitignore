@@ -33,3 +33,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### misc ###
+/.jetclient/
+/Финальная работа курса «Enterprise-технологии в Java-разработке».pdf

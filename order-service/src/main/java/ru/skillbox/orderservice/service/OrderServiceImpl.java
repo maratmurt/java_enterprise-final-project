@@ -8,6 +8,7 @@ import ru.skillbox.orderservice.controller.OrderNotFoundException;
 import ru.skillbox.orderservice.domain.*;
 import ru.skillbox.orderservice.repository.OrderRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -35,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
                 OrderStatus.REGISTERED
         );
         newOrder.addStatusHistory(newOrder.getStatus(), ServiceName.ORDER_SERVICE, "Order created");
+        newOrder.setCreationTime(LocalDateTime.now());
+        newOrder.setModifiedTime(LocalDateTime.now());
         Order order = orderRepository.save(newOrder);
         kafkaService.produce(OrderKafkaDto.toKafkaDto(order));
         return Optional.of(order);
