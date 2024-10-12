@@ -23,6 +23,9 @@ public class Order {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "description")
     private String description;
 
@@ -55,12 +58,14 @@ public class Order {
     private List<OrderStatusHistory> orderStatusHistory = new ArrayList<>();
 
     public Order(
+            String username,
             String departureAddress,
             String destinationAddress,
             String description,
             Long cost,
             OrderStatus status
     ) {
+        this.username = username;
         this.departureAddress = departureAddress;
         this.destinationAddress = destinationAddress;
         this.description = description;

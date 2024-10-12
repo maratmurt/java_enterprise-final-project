@@ -58,6 +58,7 @@ public class OrderControllerTest {
     @BeforeEach
     public void setUp() {
         order = new Order(
+                "User 1",
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Tulskaya 24",
                 "Order #112",
@@ -65,6 +66,7 @@ public class OrderControllerTest {
                 OrderStatus.REGISTERED
         );
         newOrder = new Order(
+                "User 1",
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Dubininskaya 39",
                 "Order #342",
@@ -98,7 +100,7 @@ public class OrderControllerTest {
                 "Moscow, st.Dubininskaya 39",
                 2450L
         );
-        Mockito.when(orderService.addOrder(orderDto)).thenReturn(Optional.of(newOrder));
+        Mockito.when(orderService.addOrder(orderDto, "User 1")).thenReturn(Optional.of(newOrder));
         mvc.perform(
                         post("/order")
                                 .accept(MediaType.APPLICATION_JSON)

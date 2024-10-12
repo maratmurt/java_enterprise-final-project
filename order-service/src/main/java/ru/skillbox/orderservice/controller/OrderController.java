@@ -45,8 +45,9 @@ public class OrderController {
 
     @Operation(summary = "Add order and start delivery process for it", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/order")
-    public ResponseEntity<?> addOrder(@RequestBody OrderDto input) {
-        return orderService.addOrder(input)
+    public ResponseEntity<?> addOrder(@RequestBody OrderDto input,
+                                      @RequestHeader(name = "X-Username", required = false) String username) {
+        return orderService.addOrder(input, username)
                 .map(order -> ResponseEntity.status(HttpStatus.CREATED).body(order))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build());
     }

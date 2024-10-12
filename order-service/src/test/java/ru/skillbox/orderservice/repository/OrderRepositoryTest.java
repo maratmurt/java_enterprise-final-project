@@ -24,6 +24,7 @@ public class OrderRepositoryTest {
     @Test
     public void whenGetByDescription_thenReturnOrder() {
         Order order = new Order(
+                "User 1",
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Tulskaya 24",
                 "Order #112",

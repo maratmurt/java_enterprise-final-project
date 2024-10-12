@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface OrderService {
 
-    Optional<Order> addOrder(OrderDto orderDto);
+    Optional<Order> addOrder(OrderDto orderDto, String username);
 
     void updateOrderStatus(Long id, StatusDto statusDto);
 }

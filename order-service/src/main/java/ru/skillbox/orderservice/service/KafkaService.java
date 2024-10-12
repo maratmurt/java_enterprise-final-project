@@ -1,8 +1,9 @@
 package ru.skillbox.orderservice.service;
 
-import ru.skillbox.orderservice.domain.OrderKafkaDto;
+import ru.skillbox.kafka.Event;
 
 public interface KafkaService {
 
-    void produce(OrderKafkaDto orderKafkaDto);
+    void produce(Event event);
+
 }

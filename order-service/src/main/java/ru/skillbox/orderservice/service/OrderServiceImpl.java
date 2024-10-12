@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.skillbox.kafka.OrderCreatedEvent;
 import ru.skillbox.orderservice.controller.OrderNotFoundException;
 import ru.skillbox.orderservice.domain.*;
 import ru.skillbox.orderservice.repository.OrderRepository;
@@ -27,8 +28,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Optional<Order> addOrder(OrderDto orderDto) {
+    public Optional<Order> addOrder(OrderDto orderDto, String username) {
         Order newOrder = new Order(
+                username,
                 orderDto.getDepartureAddress(),
                 orderDto.getDestinationAddress(),
                 orderDto.getDescription(),
@@ -39,7 +41,14 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setCreationTime(LocalDateTime.now());
         newOrder.setModifiedTime(LocalDateTime.now());
         Order order = orderRepository.save(newOrder);
-        kafkaService.produce(OrderKafkaDto.toKafkaDto(order));
+
+        OrderCreatedEvent event = OrderCreatedEvent.builder()
+                .orderId(order.getId())
+                .username(order.getUsername())
+                .cost(order.getCost())
+                .build();
+        kafkaService.produce(event);
+
         return Optional.of(order);
     }
 
@@ -55,6 +64,6 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(statusDto.getStatus());
         order.addStatusHistory(statusDto.getStatus(), statusDto.getServiceName(), statusDto.getComment());
         Order resultOrder = orderRepository.save(order);
-        kafkaService.produce(OrderKafkaDto.toKafkaDto(resultOrder));
+//        kafkaService.produce(OrderKafkaDto.toKafkaDto(resultOrder));
     }
 }
