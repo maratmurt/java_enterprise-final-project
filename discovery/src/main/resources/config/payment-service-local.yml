@@ -19,6 +19,15 @@ spring:
     show-sql: true
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+  cloud:
+    stream:
+      function:
+        definition: orderEventProcessor
+      bindings:
+        orderEventProcessor-in-0:
+          destination: order
+        orderEventProcessor-out-0:
+          destination: payment
 
 management:
   endpoints:

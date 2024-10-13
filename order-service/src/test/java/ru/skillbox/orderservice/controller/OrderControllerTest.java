@@ -62,7 +62,7 @@ public class OrderControllerTest {
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Tulskaya 24",
                 "Order #112",
-                1500L,
+                1500D,
                 OrderStatus.REGISTERED
         );
         newOrder = new Order(
@@ -70,7 +70,7 @@ public class OrderControllerTest {
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Dubininskaya 39",
                 "Order #342",
-                2450L,
+                2450D,
                 OrderStatus.REGISTERED
         );
         orders = Collections.singletonList(order);
@@ -98,7 +98,7 @@ public class OrderControllerTest {
                 "Order #342",
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Dubininskaya 39",
-                2450L
+                2450D
         );
         Mockito.when(orderService.addOrder(orderDto, "User 1")).thenReturn(Optional.of(newOrder));
         mvc.perform(

@@ -36,7 +36,7 @@ public class Order {
     private String destinationAddress;
 
     @Column(name = "cost")
-    private Long cost;
+    private Double cost;
 
     @CreationTimestamp
     @Column(name = "creation_time")
@@ -62,7 +62,7 @@ public class Order {
             String departureAddress,
             String destinationAddress,
             String description,
-            Long cost,
+            Double cost,
             OrderStatus status
     ) {
         this.username = username;

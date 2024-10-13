@@ -5,17 +5,14 @@ import lombok.Data;
 
 @Data
 @Builder
-public class OrderCreatedEvent implements Event {
+public class PaymentEvent implements Event {
 
     private Long orderId;
 
-    private String username;
-
-    private Long cost;
+    private String status;
 
     @Override
     public String getEvent() {
-        return "OrderCreated";
+        return "Payment";
     }
-
 }

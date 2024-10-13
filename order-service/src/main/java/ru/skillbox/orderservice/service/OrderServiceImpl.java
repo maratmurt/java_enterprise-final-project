@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.skillbox.kafka.OrderCreatedEvent;
+import ru.skillbox.kafka.OrderEvent;
 import ru.skillbox.orderservice.controller.OrderNotFoundException;
 import ru.skillbox.orderservice.domain.*;
 import ru.skillbox.orderservice.repository.OrderRepository;
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setModifiedTime(LocalDateTime.now());
         Order order = orderRepository.save(newOrder);
 
-        OrderCreatedEvent event = OrderCreatedEvent.builder()
+        OrderEvent event = OrderEvent.builder()
                 .orderId(order.getId())
                 .username(order.getUsername())
                 .cost(order.getCost())

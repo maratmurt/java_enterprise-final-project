@@ -28,7 +28,7 @@ public class OrderRepositoryTest {
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Tulskaya 24",
                 "Order #112",
-                1500L,
+                1500D,
                 OrderStatus.REGISTERED
         );
         order.addStatusHistory(OrderStatus.REGISTERED, ServiceName.ORDER_SERVICE, "Order created");

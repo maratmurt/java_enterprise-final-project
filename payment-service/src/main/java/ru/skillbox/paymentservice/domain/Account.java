@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "user_balance")
-public class UserBalance {
+@Table(name = "account")
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,7 +18,7 @@ public class UserBalance {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "amount")
-    private Double amount;
+    @Column(name = "balance")
+    private Double balance;
 
 }
