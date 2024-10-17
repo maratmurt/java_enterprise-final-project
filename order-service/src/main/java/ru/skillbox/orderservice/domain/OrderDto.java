@@ -3,6 +3,8 @@ package ru.skillbox.orderservice.domain;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class OrderDto {
@@ -14,4 +16,7 @@ public class OrderDto {
     private String destinationAddress;
 
     private Double cost;
+
+    private List<OrderProductDto> products;
+
 }

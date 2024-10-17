@@ -9,9 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>payment-service</artifactId>
+    <artifactId>inventory-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>payment-service</name>
+    <name>inventory-service</name>
     <description>Educational Spring Cloud Service</description>
 
     <dependencies>
@@ -106,7 +106,7 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
                 <configuration>
-                    <repository>delivery/payment</repository>
+                    <repository>delivery/inventory</repository>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,6 +1,6 @@
 package ru.skillbox.orderservice.service;
 
-import ru.skillbox.kafka.Event;
+import ru.skillbox.event.Event;
 
 public interface KafkaService {
 

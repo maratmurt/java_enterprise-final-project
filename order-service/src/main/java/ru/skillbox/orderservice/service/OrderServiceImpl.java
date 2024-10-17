@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.skillbox.kafka.OrderEvent;
+import ru.skillbox.event.OrderEvent;
 import ru.skillbox.orderservice.controller.OrderNotFoundException;
 import ru.skillbox.orderservice.domain.*;
 import ru.skillbox.orderservice.repository.OrderRepository;

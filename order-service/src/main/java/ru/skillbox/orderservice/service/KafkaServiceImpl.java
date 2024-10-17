@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-import ru.skillbox.kafka.Event;
+import ru.skillbox.event.Event;
 
 @Service
 public class KafkaServiceImpl implements KafkaService {

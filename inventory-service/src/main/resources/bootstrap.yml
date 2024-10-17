@@ -1,10 +1,10 @@
 server:
   servlet:
-    context-path: /pay
+    context-path: /inv
 
 spring:
   application:
-    name: payment-service
+    name: inventory-service
   profiles:
     active: local
   cloud:

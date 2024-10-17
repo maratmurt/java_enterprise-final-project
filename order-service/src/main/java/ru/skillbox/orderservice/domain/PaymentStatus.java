@@ -1,4 +1,4 @@
-package ru.skillbox.paymentservice.domain;
+package ru.skillbox.orderservice.domain;
 
 public enum PaymentStatus {
 

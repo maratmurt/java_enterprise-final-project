@@ -1,6 +1,4 @@
-package ru.skillbox.paymentservice.handler;
-
-import ru.skillbox.kafka.Event;
+package ru.skillbox.event;
 
 public interface EventHandler<T extends Event, R extends Event> {
 

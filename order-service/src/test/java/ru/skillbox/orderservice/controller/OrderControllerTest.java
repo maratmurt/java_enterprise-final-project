@@ -18,6 +18,7 @@ import ru.skillbox.orderservice.domain.StatusDto;
 import ru.skillbox.orderservice.repository.OrderRepository;
 import ru.skillbox.orderservice.service.OrderService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -98,7 +99,8 @@ public class OrderControllerTest {
                 "Order #342",
                 "Moscow, st.Taganskaya 150",
                 "Moscow, st.Dubininskaya 39",
-                2450D
+                2450D,
+                new ArrayList<>()
         );
         Mockito.when(orderService.addOrder(orderDto, "User 1")).thenReturn(Optional.of(newOrder));
         mvc.perform(

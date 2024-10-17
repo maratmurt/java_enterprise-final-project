@@ -21,6 +21,10 @@ eureka:
   server:
     waitTimeInMsWhenSyncEmpty: 0
 
+service:
+  order:
+    url: http://localhost:8080/api/order/
+
 # could be used for debugging
 #logging:
 #  level:

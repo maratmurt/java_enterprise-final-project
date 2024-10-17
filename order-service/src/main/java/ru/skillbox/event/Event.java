@@ -1,4 +1,4 @@
-package ru.skillbox.kafka;
+package ru.skillbox.event;
 
 public interface Event {
 
