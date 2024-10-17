@@ -10,25 +10,21 @@ import org.springframework.web.client.RestTemplate;
 import ru.skillbox.event.EventHandler;
 import ru.skillbox.event.OrderEvent;
 import ru.skillbox.event.PaymentEvent;
+import ru.skillbox.orderservice.domain.OrderDto;
 import ru.skillbox.orderservice.domain.OrderStatus;
 import ru.skillbox.orderservice.domain.ServiceName;
 import ru.skillbox.orderservice.domain.StatusDto;
-import ru.skillbox.paymentservice.domain.Account;
-import ru.skillbox.orderservice.domain.PaymentStatus;
-import ru.skillbox.paymentservice.domain.Transaction;
-import ru.skillbox.paymentservice.repository.AccountRepository;
-import ru.skillbox.paymentservice.repository.TransactionRepository;
+import ru.skillbox.paymentservice.domain.PaymentStatus;
+import ru.skillbox.paymentservice.service.PaymentService;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent> {
 
-    private final AccountRepository accountRepository;
-
     private final RestTemplate restTemplate;
 
-    private final TransactionRepository transactionRepository;
+    private final PaymentService paymentService;
 
     @Value("${service.order.url}")
     private String orderServiceUrl;
@@ -43,30 +39,19 @@ public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent>
         }
 
         Long orderId = orderEvent.getOrderId();
+        OrderDto orderDto = orderEvent.getOrderDto();
+        String username = orderEvent.getUsername();
         PaymentEvent paymentEvent = PaymentEvent.builder()
                 .orderId(orderId)
-                .orderDto(orderEvent.getOrderDto())
+                .orderDto(orderDto)
                 .build();
 
         StatusDto statusDto = new StatusDto();
         statusDto.setServiceName(ServiceName.PAYMENT_SERVICE);
 
-        Account account = accountRepository.findByUsername(orderEvent.getUsername()).orElseThrow();
-        log.info("ACCOUNT: {}", account);
-        Double balance = account.getBalance();
-        Double cost = orderEvent.getOrderDto().getCost();
-
-        if (balance > cost) {
+        if (paymentService.payForOrder(orderDto, username)) {
             paymentEvent.setPaymentStatus(PaymentStatus.APPROVED.name());
             statusDto.setStatus(OrderStatus.PAID);
-            Transaction transaction = new Transaction();
-            transaction.setAmount(-cost);
-            transaction.setAccount(account);
-            transaction.setDescription("Order" + orderId + " payment");
-            transactionRepository.save(transaction);
-            log.info("PAYMENT OF ${} COMPLETE", cost);
-            Account updatedAccount = accountRepository.findByUsername(orderEvent.getUsername()).orElseThrow();
-            log.info("UPDATED ACCOUNT: {}", updatedAccount);
         } else {
             paymentEvent.setPaymentStatus(PaymentStatus.DECLINED.name());
             statusDto.setStatus(OrderStatus.PAYMENT_FAILED);

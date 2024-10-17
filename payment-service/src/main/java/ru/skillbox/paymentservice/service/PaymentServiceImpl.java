@@ -3,6 +3,7 @@ package ru.skillbox.paymentservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.skillbox.orderservice.domain.OrderDto;
 import ru.skillbox.paymentservice.domain.Account;
 import ru.skillbox.paymentservice.domain.PaymentDto;
 import ru.skillbox.paymentservice.domain.Transaction;
@@ -19,17 +20,34 @@ public class PaymentServiceImpl implements PaymentService {
     private final AccountRepository accountRepository;
 
     @Override
-    public PaymentDto recharge(PaymentDto paymentDto, String username) {
+    public Transaction recharge(PaymentDto paymentDto, String username) {
         Account account = accountRepository.findByUsername(username).orElseThrow();
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setAmount(paymentDto.getAmount());
         transaction.setDescription("Recharge payment");
-        transactionRepository.save(transaction);
-        log.info("Recharge payment: {}", paymentDto);
-        paymentDto.setAccountId(account.getId());
+        transaction = transactionRepository.save(transaction);
+        log.info("Recharge payment: {}", transaction);
 
-        return paymentDto;
+        return transaction;
+    }
+
+    @Override
+    public boolean payForOrder(OrderDto orderDto, String username) {
+        Account account = accountRepository.findByUsername(username).orElseThrow();
+        if (account.getBalance() < orderDto.getCost()) {
+            log.info("Payment failed: not enough money");
+            return false;
+        }
+
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setAmount(-orderDto.getCost());
+        transaction.setDescription("Payment for order");
+        transaction = transactionRepository.save(transaction);
+        log.info("Payment for order: {}", transaction);
+
+        return true;
     }
 
 }

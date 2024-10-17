@@ -17,6 +17,6 @@ public class OrderDto {
 
     private Double cost;
 
-    private List<OrderProductDto> products;
+    private List<InventoryItemDto> inventory;
 
 }

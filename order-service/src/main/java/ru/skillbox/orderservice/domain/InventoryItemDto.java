@@ -1,9 +1,9 @@
-package ru.skillbox.inventoryservice.domain;
+package ru.skillbox.orderservice.domain;
 
 import lombok.Data;
 
 @Data
-public class InventoryDto {
+public class InventoryItemDto {
 
     private Long productId;
 

@@ -1,18 +1,19 @@
 package ru.skillbox.inventoryservice.service;
 
 import ru.skillbox.inventoryservice.domain.Inventory;
-import ru.skillbox.inventoryservice.domain.InventoryListDto;
 import ru.skillbox.inventoryservice.domain.Product;
 import ru.skillbox.inventoryservice.domain.ProductDto;
+import ru.skillbox.orderservice.domain.InventoryItemDto;
+import ru.skillbox.orderservice.domain.OrderDto;
 
 import java.util.List;
 
 public interface InventoryService {
 
-    List<Inventory> receipt(InventoryListDto inventoryListDto);
+    List<Inventory> receipt(List<InventoryItemDto> items);
 
     Product addProduct(ProductDto productDto);
 
-    boolean inventOrder(InventoryListDto inventoryListDto);
+    boolean inventOrder(OrderDto orderDto);
 
 }

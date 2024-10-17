@@ -1,9 +1,13 @@
 package ru.skillbox.paymentservice.service;
 
+import ru.skillbox.orderservice.domain.OrderDto;
 import ru.skillbox.paymentservice.domain.PaymentDto;
+import ru.skillbox.paymentservice.domain.Transaction;
 
 public interface PaymentService {
 
-    PaymentDto recharge(PaymentDto paymentDto, String username);
+    Transaction recharge(PaymentDto paymentDto, String username);
+
+    boolean payForOrder(OrderDto orderDto, String username);
 
 }

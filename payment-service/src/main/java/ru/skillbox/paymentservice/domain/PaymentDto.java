@@ -7,6 +7,4 @@ public class PaymentDto {
 
     private Double amount;
 
-    private Long accountId;
-
 }

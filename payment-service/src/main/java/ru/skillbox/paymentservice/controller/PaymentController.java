@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skillbox.paymentservice.domain.PaymentDto;
+import ru.skillbox.paymentservice.domain.Transaction;
 import ru.skillbox.paymentservice.service.PaymentService;
 
 @RestController
@@ -16,8 +17,8 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/recharge")
-    public ResponseEntity<PaymentDto> recharge(@RequestBody PaymentDto paymentDto,
-                                               @RequestHeader(name = "X-Username", required = false) String username) {
+    public ResponseEntity<Transaction> recharge(@RequestBody PaymentDto paymentDto,
+                                                @RequestHeader(name = "X-Username", required = false) String username) {
         return ResponseEntity.ok(paymentService.recharge(paymentDto, username));
     }
 

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.inventoryservice.domain.*;
 import ru.skillbox.inventoryservice.repository.InventoryRepository;
 import ru.skillbox.inventoryservice.repository.ProductRepository;
+import ru.skillbox.orderservice.domain.InventoryItemDto;
+import ru.skillbox.orderservice.domain.OrderDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +20,14 @@ public class InventoryServiceImpl implements InventoryService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Inventory> receipt(InventoryListDto inventoryListDto) {
+    public List<Inventory> receipt(List<InventoryItemDto> items) {
         List<Inventory> inventoryList = new ArrayList<>();
-        for (InventoryDto inventoryDto : inventoryListDto.getInventory()) {
+        for (InventoryItemDto inventoryItemDto : items) {
             Inventory inventory = new Inventory();
-            Product product = productRepository.findById(inventoryDto.getProductId()).orElseThrow();
+            Product product = productRepository.findById(inventoryItemDto.getProductId()).orElseThrow();
             inventory.setProduct(product);
-            inventory.setQuantity(inventoryDto.getQuantity());
-            inventory.setDescription(inventoryListDto.getDescription());
+            inventory.setQuantity(inventoryItemDto.getQuantity());
+            inventory.setDescription("Goods receipt");
             inventoryList.add(inventory);
         }
         return inventoryRepository.saveAll(inventoryList);
@@ -40,17 +42,17 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public boolean inventOrder(InventoryListDto inventoryListDto) {
+    public boolean inventOrder(OrderDto orderDto) {
         List<Inventory> inventoryList = new ArrayList<>();
-        for (InventoryDto inventoryDto : inventoryListDto.getInventory()) {
-            Product product = productRepository.findById(inventoryDto.getProductId()).orElseThrow();
-            if (product.getQuantity() < inventoryDto.getQuantity()) {
+        for (InventoryItemDto inventoryItemDto : orderDto.getInventory()) {
+            Product product = productRepository.findById(inventoryItemDto.getProductId()).orElseThrow();
+            if (product.getQuantity() < inventoryItemDto.getQuantity()) {
                 return false;
             }
             Inventory inventory = new Inventory();
             inventory.setProduct(product);
-            inventory.setQuantity(-inventoryDto.getQuantity());
-            inventory.setDescription(inventoryListDto.getDescription());
+            inventory.setQuantity(-inventoryItemDto.getQuantity());
+            inventory.setDescription(orderDto.getDescription());
             inventoryList.add(inventory);
         }
         inventoryRepository.saveAll(inventoryList);
