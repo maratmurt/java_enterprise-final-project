@@ -24,7 +24,7 @@ public class Product {
     private String description;
 
     @Transient
-    private Integer quantity;
+    private Integer quantity = 0;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)

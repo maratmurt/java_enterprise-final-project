@@ -1,5 +1,6 @@
 package ru.skillbox.orderservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -55,6 +56,7 @@ public class Order {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<OrderStatusHistory> orderStatusHistory = new ArrayList<>();
 
     public Order(

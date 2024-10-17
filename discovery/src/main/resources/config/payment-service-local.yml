@@ -50,3 +50,7 @@ eureka:
 
 server:
   port: 8085
+
+service:
+  order:
+    url: http://localhost:8080/api/order/

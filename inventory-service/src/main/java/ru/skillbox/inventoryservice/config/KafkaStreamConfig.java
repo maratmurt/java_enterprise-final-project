@@ -16,7 +16,7 @@ public class KafkaStreamConfig {
     private final EventHandler<PaymentEvent, InventoryEvent> paymentEventHandler;
 
     @Bean
-    public Function<PaymentEvent, InventoryEvent> orderEventProcessor() {
+    public Function<PaymentEvent, InventoryEvent> paymentEventProcessor() {
         return paymentEventHandler::handleEvent;
     }
 

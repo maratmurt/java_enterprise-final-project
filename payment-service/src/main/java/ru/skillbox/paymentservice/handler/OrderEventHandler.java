@@ -45,6 +45,7 @@ public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent>
         Long orderId = orderEvent.getOrderId();
         PaymentEvent paymentEvent = PaymentEvent.builder()
                 .orderId(orderId)
+                .orderDto(orderEvent.getOrderDto())
                 .build();
 
         StatusDto statusDto = new StatusDto();
@@ -53,10 +54,10 @@ public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent>
         Account account = accountRepository.findByUsername(orderEvent.getUsername()).orElseThrow();
         log.info("ACCOUNT: {}", account);
         Double balance = account.getBalance();
-        Double cost = orderEvent.getCost();
+        Double cost = orderEvent.getOrderDto().getCost();
 
         if (balance > cost) {
-            paymentEvent.setStatus(PaymentStatus.APPROVED.name());
+            paymentEvent.setPaymentStatus(PaymentStatus.APPROVED.name());
             statusDto.setStatus(OrderStatus.PAID);
             Transaction transaction = new Transaction();
             transaction.setAmount(-cost);
@@ -67,7 +68,7 @@ public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent>
             Account updatedAccount = accountRepository.findByUsername(orderEvent.getUsername()).orElseThrow();
             log.info("UPDATED ACCOUNT: {}", updatedAccount);
         } else {
-            paymentEvent.setStatus(PaymentStatus.DECLINED.name());
+            paymentEvent.setPaymentStatus(PaymentStatus.DECLINED.name());
             statusDto.setStatus(OrderStatus.PAYMENT_FAILED);
         }
         restTemplate.exchange(orderServiceUrl + orderId, HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);

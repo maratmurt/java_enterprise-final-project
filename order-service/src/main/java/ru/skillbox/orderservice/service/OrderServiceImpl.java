@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEvent event = OrderEvent.builder()
                 .orderId(order.getId())
                 .username(order.getUsername())
-                .cost(order.getCost())
+                .orderDto(orderDto)
                 .build();
         kafkaService.produce(event);
 

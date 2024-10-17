@@ -2,8 +2,7 @@ package ru.skillbox.event;
 
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Map;
+import ru.skillbox.orderservice.domain.OrderDto;
 
 @Data
 @Builder
@@ -13,9 +12,7 @@ public class OrderEvent implements Event {
 
     private String username;
 
-    private Double cost;
-
-    private Map<Long, Integer> products;
+    private OrderDto orderDto;
 
     @Override
     public String getEvent() {
