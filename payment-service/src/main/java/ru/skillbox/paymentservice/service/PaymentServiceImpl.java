@@ -54,4 +54,14 @@ public class PaymentServiceImpl implements PaymentService {
         return true;
     }
 
+    @Override
+    public void refundOrder(String username, Long orderId, Double amount) {
+        Account account = accountRepository.findByUsername(username).orElseThrow();
+        Transaction transaction = new Transaction();
+        transaction.setAccount(account);
+        transaction.setAmount(amount);
+        transaction.setDescription("Order " + orderId + " refund");
+        transactionRepository.save(transaction);
+    }
+
 }

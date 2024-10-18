@@ -10,4 +10,6 @@ public interface PaymentService {
 
     boolean payForOrder(OrderDto orderDto, String username);
 
+    void refundOrder(String username, Long orderId, Double amount);
+
 }
