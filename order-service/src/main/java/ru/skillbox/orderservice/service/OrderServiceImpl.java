@@ -2,6 +2,8 @@ package ru.skillbox.orderservice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.event.OrderEvent;
@@ -18,12 +20,15 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final KafkaService kafkaService;
+    @Value("${spring.kafka.topic}")
+    private String kafkaTopic;
+
+    private final StreamBridge streamBridge;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, KafkaService kafkaService) {
+    public OrderServiceImpl(OrderRepository orderRepository, StreamBridge streamBridge) {
         this.orderRepository = orderRepository;
-        this.kafkaService = kafkaService;
+        this.streamBridge = streamBridge;
     }
 
     @Transactional
@@ -47,7 +52,8 @@ public class OrderServiceImpl implements OrderService {
                 .username(order.getUsername())
                 .orderDto(orderDto)
                 .build();
-        kafkaService.produce(event);
+        streamBridge.send(kafkaTopic, event);
+        log.info("Sent message to Kafka -> '{}'", event);
 
         return Optional.of(order);
     }
@@ -63,7 +69,6 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setStatus(statusDto.getStatus());
         order.addStatusHistory(statusDto.getStatus(), statusDto.getServiceName(), statusDto.getComment());
-        Order resultOrder = orderRepository.save(order);
-//        kafkaService.produce(OrderKafkaDto.toKafkaDto(resultOrder));
+        orderRepository.save(order);
     }
 }
