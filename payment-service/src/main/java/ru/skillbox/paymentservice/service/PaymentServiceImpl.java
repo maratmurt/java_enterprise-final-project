@@ -21,7 +21,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Transaction recharge(PaymentDto paymentDto, String username) {
-        Account account = accountRepository.findByUsername(username).orElseThrow();
+        Account account = accountRepository.findByUsername(username).orElseGet(() -> {
+            Account newAccount = new Account();
+            newAccount.setUsername(username);
+            return accountRepository.save(newAccount);
+        });
         Transaction transaction = new Transaction();
         transaction.setAccount(account);
         transaction.setAmount(paymentDto.getAmount());
