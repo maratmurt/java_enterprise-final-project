@@ -1,4 +1,4 @@
-package ru.skillbox.inventoryservice.domain;
+package ru.skillbox.orderservice.domain;
 
 public enum InventoryStatus {
 

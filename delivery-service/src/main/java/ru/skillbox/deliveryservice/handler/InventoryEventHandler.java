@@ -12,10 +12,7 @@ import ru.skillbox.deliveryservice.service.DeliveryService;
 import ru.skillbox.event.DeliveryEvent;
 import ru.skillbox.event.EventHandler;
 import ru.skillbox.event.InventoryEvent;
-import ru.skillbox.orderservice.domain.OrderDto;
-import ru.skillbox.orderservice.domain.OrderStatus;
-import ru.skillbox.orderservice.domain.ServiceName;
-import ru.skillbox.orderservice.domain.StatusDto;
+import ru.skillbox.orderservice.domain.*;
 
 @Component
 @RequiredArgsConstructor
@@ -32,6 +29,11 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Deliv
     @Override
     public DeliveryEvent handleEvent(InventoryEvent inventoryEvent) {
         log.info("Received inventory event: {}", inventoryEvent);
+
+        if (!inventoryEvent.getInventoryStatus().equals(InventoryStatus.COMPLETE.name())) {
+            return null;
+        }
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

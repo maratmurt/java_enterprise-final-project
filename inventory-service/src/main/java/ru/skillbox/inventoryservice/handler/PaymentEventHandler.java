@@ -10,11 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import ru.skillbox.event.EventHandler;
 import ru.skillbox.event.InventoryEvent;
 import ru.skillbox.event.PaymentEvent;
+import ru.skillbox.orderservice.domain.InventoryStatus;
 import ru.skillbox.inventoryservice.service.InventoryService;
-import ru.skillbox.orderservice.domain.OrderDto;
-import ru.skillbox.orderservice.domain.OrderStatus;
-import ru.skillbox.orderservice.domain.ServiceName;
-import ru.skillbox.orderservice.domain.StatusDto;
+import ru.skillbox.orderservice.domain.*;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +29,11 @@ public class PaymentEventHandler implements EventHandler<PaymentEvent, Inventory
     @Override
     public InventoryEvent handleEvent(PaymentEvent paymentEvent) {
         log.info("Payment event received: {}", paymentEvent);
+
+        if (!paymentEvent.getPaymentStatus().equals(PaymentStatus.APPROVED.name())) {
+            return null;
+        }
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -43,14 +46,16 @@ public class PaymentEventHandler implements EventHandler<PaymentEvent, Inventory
         OrderDto orderDto = paymentEvent.getOrderDto();
         Long orderId = paymentEvent.getOrderId();
 
-        InventoryEvent inventoryEvent = null;
+        InventoryEvent inventoryEvent = new InventoryEvent();
+        inventoryEvent.setOrderId(orderId);
+        inventoryEvent.setOrderDto(orderDto);
+
         if (inventoryService.inventOrder(orderDto)) {
-            inventoryEvent = new InventoryEvent();
-            inventoryEvent.setOrderId(orderId);
-            inventoryEvent.setOrderDto(orderDto);
             statusDto.setStatus(OrderStatus.INVENTED);
+            inventoryEvent.setInventoryStatus(InventoryStatus.COMPLETE.name());
         } else {
             statusDto.setStatus(OrderStatus.INVENTMENT_FAILED);
+            inventoryEvent.setInventoryStatus(InventoryStatus.INCOMPLETE.name());
         }
         restTemplate.exchange(orderServiceUrl + orderId, HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);
 
