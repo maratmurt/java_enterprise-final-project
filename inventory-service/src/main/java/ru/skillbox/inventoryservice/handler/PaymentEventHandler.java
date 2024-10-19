@@ -45,10 +45,12 @@ public class PaymentEventHandler implements EventHandler<PaymentEvent, Inventory
 
         OrderDto orderDto = paymentEvent.getOrderDto();
         Long orderId = paymentEvent.getOrderId();
+        String username = paymentEvent.getUsername();
 
         InventoryEvent inventoryEvent = new InventoryEvent();
         inventoryEvent.setOrderId(orderId);
         inventoryEvent.setOrderDto(orderDto);
+        inventoryEvent.setUsername(username);
 
         if (inventoryService.inventOrder(orderDto)) {
             statusDto.setStatus(OrderStatus.INVENTED);

@@ -7,7 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.skillbox.deliveryservice.domain.DeliveryStatus;
+import ru.skillbox.orderservice.domain.DeliveryStatus;
 import ru.skillbox.deliveryservice.service.DeliveryService;
 import ru.skillbox.event.DeliveryEvent;
 import ru.skillbox.event.EventHandler;
@@ -42,6 +42,7 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Deliv
 
         Long orderId = inventoryEvent.getOrderId();
         OrderDto orderDto = inventoryEvent.getOrderDto();
+        String username = inventoryEvent.getUsername();
 
         StatusDto statusDto = new StatusDto();
         statusDto.setServiceName(ServiceName.DELIVERY_SERVICE);
@@ -49,6 +50,7 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Deliv
         DeliveryEvent deliveryEvent = new DeliveryEvent();
         deliveryEvent.setOrderId(orderId);
         deliveryEvent.setOrderDto(orderDto);
+        deliveryEvent.setUsername(username);
 
         if (deliveryService.shipOrder(orderId, orderDto)) {
             deliveryEvent.setDeliveryStatus(DeliveryStatus.DELIVERED.name());

@@ -8,6 +8,8 @@ public class InventoryEvent implements Event {
 
     private Long orderId;
 
+    private String username;
+
     private String inventoryStatus;
 
     private OrderDto orderDto;

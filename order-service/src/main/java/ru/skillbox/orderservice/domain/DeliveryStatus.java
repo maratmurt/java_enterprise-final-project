@@ -1,4 +1,4 @@
-package ru.skillbox.deliveryservice.domain;
+package ru.skillbox.orderservice.domain;
 
 public enum DeliveryStatus {
 

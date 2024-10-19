@@ -2,6 +2,7 @@ package ru.skillbox.deliveryservice.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.skillbox.orderservice.domain.DeliveryStatus;
 
 import javax.persistence.*;
 

@@ -8,6 +8,8 @@ public class PaymentEvent implements Event {
 
     private Long orderId;
 
+    private String username;
+
     private String paymentStatus;
 
     private OrderDto orderDto;

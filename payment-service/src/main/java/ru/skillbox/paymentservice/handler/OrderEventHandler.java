@@ -48,6 +48,7 @@ public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent>
         PaymentEvent paymentEvent = new PaymentEvent();
         paymentEvent.setOrderId(orderId);
         paymentEvent.setOrderDto(orderDto);
+        paymentEvent.setUsername(username);
 
         if (paymentService.payForOrder(orderDto, username)) {
             paymentEvent.setPaymentStatus(PaymentStatus.APPROVED.name());

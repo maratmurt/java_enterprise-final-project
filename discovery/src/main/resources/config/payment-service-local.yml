@@ -22,11 +22,19 @@ spring:
   cloud:
     stream:
       function:
-        definition: orderEventProcessor
+        definition: orderEventProcessor;inventoryEventProcessor;deliveryEventProcessor
       bindings:
         orderEventProcessor-in-0:
           destination: order
         orderEventProcessor-out-0:
+          destination: payment
+        inventoryEventProcessor-in-0:
+          destination: inventory
+        inventoryEventProcessor-out-0:
+          destination: payment
+        deliveryEventProcessor-in-0:
+          destination: delivery
+        deliveryEventProcessor-out-0:
           destination: payment
 
 management:

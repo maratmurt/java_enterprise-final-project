@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skillbox.deliveryservice.domain.Delivery;
-import ru.skillbox.deliveryservice.domain.DeliveryStatus;
+import ru.skillbox.orderservice.domain.DeliveryStatus;
 import ru.skillbox.deliveryservice.repository.DeliveryRepository;
 import ru.skillbox.orderservice.domain.OrderDto;
 
