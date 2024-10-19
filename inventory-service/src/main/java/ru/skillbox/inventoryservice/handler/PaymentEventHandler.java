@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 import ru.skillbox.event.EventHandler;
 import ru.skillbox.event.InventoryEvent;
 import ru.skillbox.event.PaymentEvent;
-import ru.skillbox.inventoryservice.domain.InventoryStatus;
 import ru.skillbox.inventoryservice.service.InventoryService;
 import ru.skillbox.orderservice.domain.OrderDto;
 import ru.skillbox.orderservice.domain.OrderStatus;
@@ -44,14 +43,13 @@ public class PaymentEventHandler implements EventHandler<PaymentEvent, Inventory
         OrderDto orderDto = paymentEvent.getOrderDto();
         Long orderId = paymentEvent.getOrderId();
 
-        InventoryEvent inventoryEvent = new InventoryEvent();
-        inventoryEvent.setOrderId(orderId);
-        inventoryEvent.setOrderDto(orderDto);
+        InventoryEvent inventoryEvent = null;
         if (inventoryService.inventOrder(orderDto)) {
-            inventoryEvent.setInventoryStatus(InventoryStatus.COMPLETE.name());
+            inventoryEvent = new InventoryEvent();
+            inventoryEvent.setOrderId(orderId);
+            inventoryEvent.setOrderDto(orderDto);
             statusDto.setStatus(OrderStatus.INVENTED);
         } else {
-            inventoryEvent.setInventoryStatus(InventoryStatus.INCOMPLETE.name());
             statusDto.setStatus(OrderStatus.INVENTMENT_FAILED);
         }
         restTemplate.exchange(orderServiceUrl + orderId, HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);

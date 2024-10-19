@@ -14,7 +14,6 @@ import ru.skillbox.orderservice.domain.OrderDto;
 import ru.skillbox.orderservice.domain.OrderStatus;
 import ru.skillbox.orderservice.domain.ServiceName;
 import ru.skillbox.orderservice.domain.StatusDto;
-import ru.skillbox.paymentservice.domain.PaymentStatus;
 import ru.skillbox.paymentservice.service.PaymentService;
 
 @Component
@@ -41,19 +40,17 @@ public class OrderEventHandler implements EventHandler<OrderEvent, PaymentEvent>
         Long orderId = orderEvent.getOrderId();
         OrderDto orderDto = orderEvent.getOrderDto();
         String username = orderEvent.getUsername();
-        PaymentEvent paymentEvent = PaymentEvent.builder()
-                .orderId(orderId)
-                .orderDto(orderDto)
-                .build();
 
         StatusDto statusDto = new StatusDto();
         statusDto.setServiceName(ServiceName.PAYMENT_SERVICE);
 
+        PaymentEvent paymentEvent = null;
         if (paymentService.payForOrder(orderDto, username)) {
-            paymentEvent.setPaymentStatus(PaymentStatus.APPROVED.name());
+            paymentEvent = new PaymentEvent();
+            paymentEvent.setOrderId(orderId);
+            paymentEvent.setOrderDto(orderDto);
             statusDto.setStatus(OrderStatus.PAID);
         } else {
-            paymentEvent.setPaymentStatus(PaymentStatus.DECLINED.name());
             statusDto.setStatus(OrderStatus.PAYMENT_FAILED);
         }
         restTemplate.exchange(orderServiceUrl + orderId, HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);
