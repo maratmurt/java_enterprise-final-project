@@ -26,6 +26,8 @@ spring:
       bindings:
         inventoryEventProcessor-in-0:
           destination: inventory
+        inventoryEventProcessor-out-0:
+          destination: delivery
 
 management:
   endpoints:

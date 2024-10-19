@@ -7,19 +7,20 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import ru.skillbox.deliveryservice.domain.DeliveryStatus;
 import ru.skillbox.deliveryservice.service.DeliveryService;
-import ru.skillbox.event.EventConsumer;
+import ru.skillbox.event.DeliveryEvent;
+import ru.skillbox.event.EventHandler;
 import ru.skillbox.event.InventoryEvent;
+import ru.skillbox.orderservice.domain.OrderDto;
 import ru.skillbox.orderservice.domain.OrderStatus;
 import ru.skillbox.orderservice.domain.ServiceName;
 import ru.skillbox.orderservice.domain.StatusDto;
 
-import java.util.Random;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class InventoryEventConsumer implements EventConsumer<InventoryEvent> {
+public class InventoryEventHandler implements EventHandler<InventoryEvent, DeliveryEvent> {
 
     private final DeliveryService deliveryService;
 
@@ -29,22 +30,33 @@ public class InventoryEventConsumer implements EventConsumer<InventoryEvent> {
     private String orderServiceUrl;
 
     @Override
-    public void consumeEvent(InventoryEvent event) {
-        log.info("Received inventory event: {}", event);
+    public DeliveryEvent handleEvent(InventoryEvent inventoryEvent) {
+        log.info("Received inventory event: {}", inventoryEvent);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+        Long orderId = inventoryEvent.getOrderId();
+        OrderDto orderDto = inventoryEvent.getOrderDto();
+
         StatusDto statusDto = new StatusDto();
         statusDto.setServiceName(ServiceName.DELIVERY_SERVICE);
 
-        if (deliveryService.shipOrder(event.getOrderId(), event.getOrderDto())) {
+        DeliveryEvent deliveryEvent = new DeliveryEvent();
+        deliveryEvent.setOrderId(orderId);
+        deliveryEvent.setOrderDto(orderDto);
+
+        if (deliveryService.shipOrder(orderId, orderDto)) {
+            deliveryEvent.setDeliveryStatus(DeliveryStatus.DELIVERED.name());
             statusDto.setStatus(OrderStatus.DELIVERED);
         } else {
+            deliveryEvent.setDeliveryStatus(DeliveryStatus.LOST.name());
             statusDto.setStatus(OrderStatus.DELIVERY_FAILED);
         }
-        restTemplate.exchange(orderServiceUrl + event.getOrderId(), HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);
+        restTemplate.exchange(orderServiceUrl + inventoryEvent.getOrderId(), HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);
+
+        return deliveryEvent;
     }
 }
