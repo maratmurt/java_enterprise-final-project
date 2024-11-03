@@ -32,16 +32,14 @@ public class DeliveryEventHandler implements EventHandler<DeliveryEvent, Invento
             throw new RuntimeException(e);
         }
 
-        Long orderId = deliveryEvent.getOrderId();
         OrderDto orderDto = deliveryEvent.getOrderDto();
 
         inventoryService.receipt(orderDto.getInventory(), "Order returned");
 
-        InventoryEvent inventoryEvent = new InventoryEvent();
-        inventoryEvent.setOrderId(orderId);
-        inventoryEvent.setOrderDto(orderDto);
-        inventoryEvent.setInventoryStatus(InventoryStatus.RETURNED.name());
-
-        return inventoryEvent;
+        return new InventoryEvent(
+                deliveryEvent.getOrderId(),
+                deliveryEvent.getUsername(),
+                InventoryStatus.RETURNED.name(),
+                orderDto);
     }
 }

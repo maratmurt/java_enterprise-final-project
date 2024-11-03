@@ -47,11 +47,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setModifiedTime(LocalDateTime.now());
         Order order = orderRepository.save(newOrder);
 
-        OrderEvent event = OrderEvent.builder()
-                .orderId(order.getId())
-                .username(order.getUsername())
-                .orderDto(orderDto)
-                .build();
+        OrderEvent event = new OrderEvent(order.getId(), username, orderDto);
         streamBridge.send(kafkaTopic, event);
         log.info("Sent message to Kafka -> '{}'", event);
 

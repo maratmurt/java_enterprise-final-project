@@ -38,11 +38,10 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Payme
 
         paymentService.refundOrder(username, orderId, orderDto.getCost());
 
-        PaymentEvent paymentEvent = new PaymentEvent();
-        paymentEvent.setOrderId(orderId);
-        paymentEvent.setOrderDto(orderDto);
-        paymentEvent.setPaymentStatus(PaymentStatus.REFUND.name());
-
-        return paymentEvent;
+        return new PaymentEvent(
+                orderId,
+                username,
+                PaymentStatus.REFUND.name(),
+                orderDto);
     }
 }

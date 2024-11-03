@@ -42,17 +42,11 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Deliv
 
         Long orderId = inventoryEvent.getOrderId();
         OrderDto orderDto = inventoryEvent.getOrderDto();
-        String username = inventoryEvent.getUsername();
 
         StatusDto orderStatus = new StatusDto();
         orderStatus.setServiceName(ServiceName.DELIVERY_SERVICE);
 
-        DeliveryEvent deliveryEvent = new DeliveryEvent();
-        deliveryEvent.setOrderId(orderId);
-        deliveryEvent.setOrderDto(orderDto);
-        deliveryEvent.setUsername(username);
         DeliveryStatus deliveryStatus = deliveryService.shipOrder(orderId, orderDto).getStatus();
-        deliveryEvent.setDeliveryStatus(deliveryStatus.name());
 
         if (deliveryStatus.equals(DeliveryStatus.DELIVERED)) {
             orderStatus.setStatus(OrderStatus.DELIVERED);
@@ -61,6 +55,10 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Deliv
         }
         restTemplate.exchange(orderServiceUrl + orderId, HttpMethod.PATCH, new HttpEntity<>(orderStatus), Void.class);
 
-        return deliveryEvent;
+        return new DeliveryEvent(
+                orderId,
+                inventoryEvent.getUsername(),
+                deliveryStatus.name(),
+                orderDto);
     }
 }

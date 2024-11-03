@@ -1,11 +1,13 @@
 package ru.skillbox.event;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.skillbox.orderservice.domain.OrderDto;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderEvent implements Event {
 
     private Long orderId;
