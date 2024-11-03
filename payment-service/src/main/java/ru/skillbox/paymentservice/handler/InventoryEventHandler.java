@@ -22,7 +22,7 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Payme
     public PaymentEvent handleEvent(InventoryEvent inventoryEvent) {
         log.info("Received inventory event: {}", inventoryEvent);
 
-        if (inventoryEvent.getInventoryStatus().equals(InventoryStatus.COMPLETE.name())) {
+        if (!inventoryEvent.getInventoryStatus().equals(InventoryStatus.INCOMPLETE.name())) {
             return null;
         }
 

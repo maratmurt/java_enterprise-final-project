@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface InventoryService {
 
-    List<Inventory> receipt(List<InventoryItemDto> items);
+    List<Inventory> receipt(List<InventoryItemDto> items, String description);
 
     Product addProduct(ProductDto productDto);
 

@@ -18,22 +18,22 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryRepository deliveryRepository;
 
     @Override
-    public boolean shipOrder(Long orderId, OrderDto orderDto) {
+    public Delivery shipOrder(Long orderId, OrderDto orderDto) {
         Delivery delivery = new Delivery();
         delivery.setOrderId(orderId);
         delivery.setDepartureAddress(orderDto.getDepartureAddress());
         delivery.setDestinationAddress(orderDto.getDestinationAddress());
 
         Random random = new Random(orderId);
-        boolean isDelivered = random.nextInt(100) >= 50;
-        if (isDelivered) {
+        if (random.nextInt(100) >= 15) {
             delivery.setStatus(DeliveryStatus.DELIVERED);
-        } else {
+        } else if (random.nextBoolean()){
             delivery.setStatus(DeliveryStatus.LOST);
+        } else {
+            delivery.setStatus(DeliveryStatus.RETURNED);
         }
-        deliveryRepository.save(delivery);
 
-        return isDelivered;
+        return deliveryRepository.save(delivery);
     }
 
 }

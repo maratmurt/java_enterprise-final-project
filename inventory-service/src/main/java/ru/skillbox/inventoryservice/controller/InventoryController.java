@@ -21,7 +21,7 @@ public class InventoryController {
 
     @PostMapping("/inventory")
     public ResponseEntity<List<Inventory>> receipt(@RequestBody List<InventoryItemDto> items) {
-        return ResponseEntity.ok(inventoryService.receipt(items));
+        return ResponseEntity.ok(inventoryService.receipt(items, "Goods receipt"));
     }
 
     @PostMapping("/product")

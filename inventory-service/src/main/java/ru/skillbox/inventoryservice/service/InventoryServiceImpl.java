@@ -20,14 +20,14 @@ public class InventoryServiceImpl implements InventoryService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Inventory> receipt(List<InventoryItemDto> items) {
+    public List<Inventory> receipt(List<InventoryItemDto> items, String description) {
         List<Inventory> inventoryList = new ArrayList<>();
         for (InventoryItemDto inventoryItemDto : items) {
             Inventory inventory = new Inventory();
             Product product = productRepository.findById(inventoryItemDto.getProductId()).orElseThrow();
             inventory.setProduct(product);
             inventory.setQuantity(inventoryItemDto.getQuantity());
-            inventory.setDescription("Goods receipt");
+            inventory.setDescription(description);
             inventoryList.add(inventory);
         }
         return inventoryRepository.saveAll(inventoryList);

@@ -44,22 +44,22 @@ public class InventoryEventHandler implements EventHandler<InventoryEvent, Deliv
         OrderDto orderDto = inventoryEvent.getOrderDto();
         String username = inventoryEvent.getUsername();
 
-        StatusDto statusDto = new StatusDto();
-        statusDto.setServiceName(ServiceName.DELIVERY_SERVICE);
+        StatusDto orderStatus = new StatusDto();
+        orderStatus.setServiceName(ServiceName.DELIVERY_SERVICE);
 
         DeliveryEvent deliveryEvent = new DeliveryEvent();
         deliveryEvent.setOrderId(orderId);
         deliveryEvent.setOrderDto(orderDto);
         deliveryEvent.setUsername(username);
+        DeliveryStatus deliveryStatus = deliveryService.shipOrder(orderId, orderDto).getStatus();
+        deliveryEvent.setDeliveryStatus(deliveryStatus.name());
 
-        if (deliveryService.shipOrder(orderId, orderDto)) {
-            deliveryEvent.setDeliveryStatus(DeliveryStatus.DELIVERED.name());
-            statusDto.setStatus(OrderStatus.DELIVERED);
+        if (deliveryStatus.equals(DeliveryStatus.DELIVERED)) {
+            orderStatus.setStatus(OrderStatus.DELIVERED);
         } else {
-            deliveryEvent.setDeliveryStatus(DeliveryStatus.LOST.name());
-            statusDto.setStatus(OrderStatus.DELIVERY_FAILED);
+            orderStatus.setStatus(OrderStatus.DELIVERY_FAILED);
         }
-        restTemplate.exchange(orderServiceUrl + inventoryEvent.getOrderId(), HttpMethod.PATCH, new HttpEntity<>(statusDto), Void.class);
+        restTemplate.exchange(orderServiceUrl + orderId, HttpMethod.PATCH, new HttpEntity<>(orderStatus), Void.class);
 
         return deliveryEvent;
     }
