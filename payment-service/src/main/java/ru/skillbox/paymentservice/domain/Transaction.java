@@ -1,13 +1,11 @@
 package ru.skillbox.paymentservice.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "transaction")
 public class Transaction {
 

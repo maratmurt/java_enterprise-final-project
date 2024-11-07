@@ -1,19 +1,15 @@
 package ru.skillbox.paymentservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "account")
-@ToString
 public class Account {
 
     @Id
@@ -27,6 +23,7 @@ public class Account {
     private Double balance;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     List<Transaction> transactions = new ArrayList<>();
