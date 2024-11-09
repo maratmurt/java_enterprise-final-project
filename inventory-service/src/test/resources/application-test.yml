@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: inventory-service
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: create
+
+service:
+  order:
+    url: http://localhost:8080/api/order/

@@ -1,16 +1,15 @@
 package ru.skillbox.inventoryservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "product")
 public class Product {
 
@@ -24,9 +23,10 @@ public class Product {
     private String description;
 
     @Transient
-    private Integer quantity = 0;
+    private Integer quantity;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Inventory> inventoryHistory = new ArrayList<>();
 
