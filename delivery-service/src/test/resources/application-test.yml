@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: delivery-service
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: create
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+  cloud:
+    stream:
+      function:
+        definition: inventoryEventProcessor
+      bindings:
+        inventoryEventProcessor-in-0:
+          destination: inventory
+        inventoryEventProcessor-out-0:
+          destination: delivery
+
+service:
+  order:
+    url: http://localhost:8080/api/order/

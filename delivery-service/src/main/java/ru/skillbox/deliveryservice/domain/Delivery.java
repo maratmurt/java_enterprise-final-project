@@ -1,14 +1,12 @@
 package ru.skillbox.deliveryservice.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import ru.skillbox.orderservice.domain.DeliveryStatus;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "delivery")
 public class Delivery {
 
