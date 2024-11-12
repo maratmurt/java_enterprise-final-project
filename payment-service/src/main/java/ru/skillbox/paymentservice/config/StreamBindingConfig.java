@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 @Configuration
 @RequiredArgsConstructor
-public class KafkaStreamConfig {
+public class StreamBindingConfig {
 
     private final EventHandler<OrderEvent, PaymentEvent> orderEventHandler;
 

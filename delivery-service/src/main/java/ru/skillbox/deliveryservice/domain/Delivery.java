@@ -12,6 +12,7 @@ public class Delivery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "order_id")
@@ -24,6 +25,7 @@ public class Delivery {
     private String destinationAddress;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private DeliveryStatus status;
 
 }

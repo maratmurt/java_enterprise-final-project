@@ -7,13 +7,12 @@ import ru.skillbox.event.DeliveryEvent;
 import ru.skillbox.event.EventHandler;
 import ru.skillbox.event.InventoryEvent;
 import ru.skillbox.event.PaymentEvent;
-import ru.skillbox.inventoryservice.handler.DeliveryEventHandler;
 
 import java.util.function.Function;
 
 @Configuration
 @RequiredArgsConstructor
-public class KafkaStreamConfig {
+public class StreamBindingConfig {
 
     private final EventHandler<PaymentEvent, InventoryEvent> paymentEventHandler;
 

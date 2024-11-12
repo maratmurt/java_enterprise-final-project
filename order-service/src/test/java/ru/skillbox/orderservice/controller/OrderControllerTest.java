@@ -111,6 +111,7 @@ public class OrderControllerTest {
                                                 "\"destinationAddress\":\"Moscow, st.Dubininskaya 39\",\"cost\":2450}"
                                 )
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .header("X-Username", "User 1")
                 )
                 .andExpect(status().isCreated());
     }

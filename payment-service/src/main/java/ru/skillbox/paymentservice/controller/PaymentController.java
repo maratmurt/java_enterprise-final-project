@@ -18,7 +18,7 @@ public class PaymentController {
 
     @PostMapping("/recharge")
     public ResponseEntity<Transaction> recharge(@RequestBody PaymentDto paymentDto,
-                                                @RequestHeader(name = "X-Username", required = false) String username) {
+                                                @RequestHeader(name = "X-Username") String username) {
         return ResponseEntity.ok(paymentService.recharge(paymentDto, username));
     }
 

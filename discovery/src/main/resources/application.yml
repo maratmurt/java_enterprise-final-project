@@ -21,7 +21,6 @@ eureka:
   server:
     waitTimeInMsWhenSyncEmpty: 0
 
-#todo: one property for all services
 service:
   order:
     url: http://localhost:8080/api/order/
