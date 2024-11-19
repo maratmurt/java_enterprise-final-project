@@ -2,12 +2,28 @@ spring:
   application:
     name: payment-service
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    hibernate:
-      ddl-auto: create
+    generate-ddl: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  cloud:
+    stream:
+      function:
+        definition: orderEventProcessor;inventoryEventProcessor;deliveryEventProcessor
+      bindings:
+        orderEventProcessor-in-0:
+          destination: order
+        orderEventProcessor-out-0:
+          destination: payment
+        inventoryEventProcessor-in-0:
+          destination: inventory
+        inventoryEventProcessor-out-0:
+          destination: payment
+        deliveryEventProcessor-in-0:
+          destination: delivery
+        deliveryEventProcessor-out-0:
+          destination: payment
 
 service:
   order:

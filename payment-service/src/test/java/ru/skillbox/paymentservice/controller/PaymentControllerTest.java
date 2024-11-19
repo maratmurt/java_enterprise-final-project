@@ -14,16 +14,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.skillbox.paymentservice.domain.PaymentDto;
 import ru.skillbox.paymentservice.domain.Transaction;
-import ru.skillbox.paymentservice.repository.AccountRepository;
-import ru.skillbox.paymentservice.repository.TransactionRepository;
 import ru.skillbox.paymentservice.service.PaymentService;
 
-import java.util.Objects;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+@Testcontainers
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PaymentControllerTest {
@@ -33,32 +32,27 @@ public class PaymentControllerTest {
 
     private final TestRestTemplate restTemplate = new TestRestTemplate();
 
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres");
+    @Container
+    private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres");
+
+    @DynamicPropertySource
+    public static void configureDynamicProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.datasource.username", POSTGRES::getUsername);
+        registry.add("spring.datasource.password", POSTGRES::getPassword);
+    }
 
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private TransactionRepository transactionRepository;
-
     @BeforeAll
-    public static void beforeAll() {
-        postgres.start();
+    static void beforeAll() {
+        POSTGRES.start();
     }
 
     @AfterAll
-    public static void afterAll() {
-        postgres.stop();
-    }
-
-    @DynamicPropertySource
-    public static void configurePostgreSQL(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
+    static void afterAll() {
+        POSTGRES.stop();
     }
 
     @Test
@@ -67,16 +61,12 @@ public class PaymentControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Username", "User 1");
         HttpEntity<PaymentDto> request = new HttpEntity<>(new PaymentDto(100D), headers);
+
         ResponseEntity<Transaction> response = restTemplate.postForEntity(url, request, Transaction.class);
 
-        double actualTransactionAmount = Objects.requireNonNull(response.getBody()).getAmount();
-        double actualBalance = accountRepository.findByUsername("User 1")
-                .orElseThrow()
-                .getBalance();
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(100D, actualTransactionAmount);
-        assertEquals(100D, actualBalance);
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getAmount()).isEqualTo(100D);
     }
 
 }

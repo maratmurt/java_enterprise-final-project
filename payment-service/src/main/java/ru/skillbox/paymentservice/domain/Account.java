@@ -21,6 +21,7 @@ public class Account {
     private String username;
 
     @Transient
+    @EqualsAndHashCode.Exclude
     private Double balance;
 
     @ToString.Exclude
