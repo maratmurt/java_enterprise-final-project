@@ -1,14 +1,15 @@
-package ru.skillbox.paymentservice.handler;
+package ru.skillbox.inventoryservice.handler;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.web.client.MockRestServiceServer;
-import ru.skillbox.event.OrderEvent;
+import ru.skillbox.event.PaymentEvent;
+import ru.skillbox.inventoryservice.InventoryServiceAppTest;
 import ru.skillbox.orderservice.domain.OrderDto;
-import ru.skillbox.paymentservice.PaymentServiceAppTest;
 
 import java.util.Collections;
 
@@ -17,12 +18,15 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
-public class OrderEventHandlerTest extends PaymentServiceAppTest {
+public class PaymentEventHandlerTest extends InventoryServiceAppTest {
+
+    @Value("${service.order.url}")
+    private String orderServiceUrl;
 
     @Test
     public void handleEventTest() {
         MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
-        mockServer.expect(requestTo("http://localhost:8080/api/order/1"))
+        mockServer.expect(requestTo(orderServiceUrl + "1"))
                 .andExpect(method(HttpMethod.PATCH))
                 .andRespond(withStatus(HttpStatus.NO_CONTENT));
 
@@ -34,10 +38,15 @@ public class OrderEventHandlerTest extends PaymentServiceAppTest {
                 Collections.emptyList()
         );
 
-        OrderEvent orderEvent = new OrderEvent(1L, "User 1", orderDto);
+        PaymentEvent paymentEvent = new PaymentEvent(
+                1L,
+                "User 1",
+                "APPROVED",
+                orderDto
+        );
 
-        input.send(MessageBuilder.withPayload(orderEvent).build(), "order");
-        Message<byte[]> outputMessage = output.receive(1500L, "payment");
+        input.send(MessageBuilder.withPayload(paymentEvent).build(), "payment");
+        Message<byte[]> outputMessage = output.receive(1500L, "inventory");
 
         assertThat(outputMessage).isNotNull();
         mockServer.verify();

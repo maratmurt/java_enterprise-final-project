@@ -2,12 +2,24 @@ spring:
   application:
     name: inventory-service
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    hibernate:
-      ddl-auto: create
+    generate-ddl: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  cloud:
+    stream:
+      function:
+        definition: paymentEventProcessor;deliveryEventProcessor
+      bindings:
+        paymentEventProcessor-in-0:
+          destination: payment
+        paymentEventProcessor-out-0:
+          destination: inventory
+        deliveryEventProcessor-in-0:
+          destination: delivery
+        deliveryEventProcessor-out-0:
+          destination: inventory
 
 service:
   order:
