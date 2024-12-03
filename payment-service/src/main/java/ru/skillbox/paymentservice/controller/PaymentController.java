@@ -1,5 +1,7 @@
 package ru.skillbox.paymentservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    @Operation(summary = "Top up the clients balance", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/recharge")
     public ResponseEntity<Transaction> recharge(@RequestBody PaymentDto paymentDto,
                                                 @RequestHeader(name = "X-Username") String username) {

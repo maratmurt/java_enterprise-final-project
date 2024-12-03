@@ -1,115 +1,65 @@
-# java_enterprise-final project
+# Курс Skillbox "Enterprise-технологии в Java-разработке" - финальная работа
+Это микросервисное приложение для управления заказами и обработки платежей. Оно предоставляет REST API для взаимодействия с фронтендом и другими сервисами, а также использует Apache Kafka для обмена сообщениями между сервисами. В состав проекта входят служебные модули:
+1. Discovery service - для обнаружения служб и доступа к файлам конфигурации
+2. Authentication service - для аутентификации и авторизации пользователей
+3. Gateway API - общая точка входа для фронтэнда
 
-The project contains the following subprojects: 
+и клиентские модули:
+1. Order service - для хранения информации о заказах
+2. Payment service - для осуществления платежей по заказам
+3. Inventory service - служба сборки заказа для последующей отправки
+4. Delivery service - доставка заказа клиенту
 
-1. Gateway-service
-2. Discovery-service (combined with Config-service)
-3. Auth-service
-4. Order-service
+## Технологии
+- [Spring Cloud](https://spring.io/projects/spring-cloud)
+- [Spring Security](https://spring.io/projects/spring-security)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Apache Kafka](https://kafka.apache.org/)
 
-## Environment
+## Разработка
 
-To run PostgreSQL with Kafka you have to execute the command in project root Report-service:
-```
-$sudo docker-compose up -d
-```
+### Требования
+Для установки и запуска проекта необходимы [Maven](https://maven.apache.org/download.cgi) и [Docker](https://www.docker.com/).
 
-Also, you have convenient [UI for Apache Kafka](https://github.com/provectus/kafka-ui) at URL
-
-http://localhost:9999/
-
-Now you can run application services from your IDE in this order 
-- Discovery
-- Auth-service
-- Order-service
-- Gateway-service
-
-After that you can find Swagger UI of every service at URL.
-
-http://localhost:8080/some-prefix/swagger-ui/index.html
-
-Don't forget to put actual port number and prefix of service
-
-At Gateway, you can find joined Swagger UI
-http://localhost:9090/swagger-ui.html
-
-## Basic interactions
-
-You can use those curl commands, or you can do all that with Swagger UI
-
-### Authentication
-
-To create user use this request to auth service 
-```bash
-curl -X 'POST' \
-  'http://localhost:8083/auth/user/signup' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "name": "some_user",
-  "password": "some_pass"
-}'
+### Запуск Development сервера
+Чтобы запустить сервер для разработки, выполните команду:
+```shell
+docker-compose up
 ```
 
-After that you can get a token
-```bash
-curl -X 'POST' \
-  'http://localhost:8083/auth/auth/token/generate' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "name": "some_user",
-  "password": "some_pass"
-}'
+### Запуск модулей проекта
+Сначала поочерёдно запустите служебные модули:
+```shell
+mvn -f discovery/pom.xml spring-boot:run
+```
+```shell
+mvn -f auth-service/pom.xml spring-boot:run
+```
+```shell
+mvn -f gateway/pom.xml spring-boot:run
+```
+Затем запустите клиентские модули:
+```shell
+mvn -f order-service/pom.xml spring-boot:run
+```
+```shell
+mvn -f payment-service/pom.xml spring-boot:run
+```
+```shell
+mvn -f inventory-service/pom.xml spring-boot:run
+```
+```shell
+mvn -f delivery-service/pom.xml spring-boot:run
 ```
 
-Now you can use this token to authenticate requests to other service
+## Интерфейс
+Проверить работу эндпоинтов можно по следующим адресам:
 
-### Order service
 
-To create an order you can send POST request:
-
-```bash
-curl -X 'POST' \
-  'http://localhost:9090/api/order' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -H 'Bearer <put token here>'
-  -d '{
-  "description": "string",
-  "departureAddress": "string",
-  "destinationAddress": "string",
-  "cost": 0
-}'
+## Тестирование
+В проекте предусмотрены базовые тесты с использованием JUnit, Mockito и TestContainers.
+```shell
+mvn test
 ```
 
-You can list orders with GET request:
-
-```bash
-curl -X 'GET' \
-  'http://localhost:9090/api/order' \
-  -H 'accept: */*' \
-  -H 'Bearer <put token here>'
-```
-
-You can change status of order with PATCH request:
-
-```bash
-curl -X 'PATCH' \
-  'http://localhost:8080/api/order/1' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -H 'Bearer <put token here>'
-  -d '{
-  "status": "REGISTERED",
-  "serviceName": "ORDER_SERVICE",
-  "comment": "Some comment to status"
-}'
-```
-
-## Running all services with docker-compose
-
-To run all services with docker-compose use this command
-```bash
- docker-compose -f docker-compose.yml -f docker-compose.services.yml up -d
-```
+- [Марат Муртузалиев](https://t.me/marat_murtuzaliev) — Java backend developer
