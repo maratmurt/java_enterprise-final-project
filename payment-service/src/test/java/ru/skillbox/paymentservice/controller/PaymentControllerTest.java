@@ -17,7 +17,7 @@ public class PaymentControllerTest extends PaymentServiceAppTest {
 
     @Test
     public void rechargeTest() {
-        String url = "http://localhost:" + port + "/pay/recharge";
+        String url = "http://localhost:" + port + "/api/payment/recharge";
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Username", "User 1");
         HttpEntity<PaymentDto> request = new HttpEntity<>(new PaymentDto(100D), headers);

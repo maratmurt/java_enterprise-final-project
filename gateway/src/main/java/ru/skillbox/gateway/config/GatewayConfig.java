@@ -21,7 +21,7 @@ public class GatewayConfig {
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(
-                        "order_route", r -> r.path("/api/**")
+                        "order_route", r -> r.path("/api/order/**")
                                 .filters(f -> f.filter(filter))
                                 .uri("lb://ORDER-SERVICE")
                 )
@@ -31,19 +31,14 @@ public class GatewayConfig {
                                 .uri("lb://AUTH-SERVICE")
                 )
                 .route(
-                        "payment_route", r -> r.path("/pay/**")
+                        "payment_route", r -> r.path("/api/payment/**")
                                 .filters(f -> f.filter(filter))
                                 .uri("lb://PAYMENT-SERVICE")
                 )
                 .route(
-                        "inventory_route", r -> r.path("/inv/**")
+                        "inventory_route", r -> r.path("/api/inventory/**")
                                 .filters(f -> f.filter(filter))
                                 .uri("lb://INVENTORY-SERVICE")
-                )
-                .route(
-                        "delivery_route", r -> r.path("/dlv/**")
-                                .filters(f -> f.filter(filter))
-                                .uri("lb://DELIVERY-SERVICE")
                 )
                 .build();
     }

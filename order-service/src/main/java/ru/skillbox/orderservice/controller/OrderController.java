@@ -31,20 +31,20 @@ public class OrderController {
     }
 
     @Operation(summary = "List all orders in delivery system", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/order")
+    @GetMapping
     public List<Order> listOrders() {
         return orderRepository.findAll();
     }
 
     @Operation(summary = "Get an order in system by id", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/order/{orderId}")
+    @GetMapping("/{orderId}")
     public Order listOrder(@PathVariable @Parameter(description = "Id of order") Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
     @Operation(summary = "Add order and start delivery process for it", security = @SecurityRequirement(name = "bearerAuth"))
-    @PostMapping("/order")
+    @PostMapping
     public ResponseEntity<Order> addOrder(@RequestBody OrderDto input,
                                       @RequestHeader(name = "X-Username", required = false) String username) {
         return orderService.addOrder(input, username)
@@ -53,7 +53,7 @@ public class OrderController {
     }
 
     @Operation(summary = "Update order status", security = @SecurityRequirement(name = "bearerAuth"))
-    @PatchMapping("/order/{orderId}")
+    @PatchMapping("/{orderId}")
     public ResponseEntity<Void> updateOrderStatus(@PathVariable @Parameter(description = "Id of order") long orderId,
                                                @RequestBody StatusDto statusDto) {
         log.info("ORDER {} UPDATE: {}", orderId, statusDto);

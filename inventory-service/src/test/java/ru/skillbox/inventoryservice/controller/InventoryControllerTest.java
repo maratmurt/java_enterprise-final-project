@@ -45,7 +45,7 @@ public class InventoryControllerTest extends InventoryServiceAppTest {
         HttpEntity<List<InventoryItemDto>> request =
                 new HttpEntity<>(Collections.singletonList(item));
         ResponseEntity<List<Inventory>> response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/inv/inventory",
+                "http://localhost:" + port + "/api/inventory/receipt",
                 HttpMethod.POST,
                 request,
                 new ParameterizedTypeReference<>() {}
@@ -65,7 +65,7 @@ public class InventoryControllerTest extends InventoryServiceAppTest {
         ProductDto requestBody = new ProductDto();
         requestBody.setName("Product 1");
         ResponseEntity<Product> response = testRestTemplate.postForEntity(
-                "http://localhost:" + port + "/inv/product",
+                "http://localhost:" + port + "/api/inventory/product",
                 new HttpEntity<>(requestBody),
                 Product.class
         );

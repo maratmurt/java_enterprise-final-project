@@ -22,7 +22,7 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @Operation(summary = "Process the list of received goods", security = @SecurityRequirement(name = "bearerAuth"))
-    @PostMapping("/inventory")
+    @PostMapping("/receipt")
     public ResponseEntity<List<Inventory>> receipt(@RequestBody List<InventoryItemDto> items) {
         return ResponseEntity.ok(inventoryService.receipt(items, "Goods receipt"));
     }

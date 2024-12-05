@@ -1,6 +1,6 @@
-server:
-  servlet:
-    context-path: /dlv
+#server:
+#  servlet:
+#    context-path: /api/delivery
 
 spring:
   application:

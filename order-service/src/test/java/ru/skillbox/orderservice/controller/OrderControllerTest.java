@@ -86,7 +86,7 @@ public class OrderControllerTest {
     @Test
     public void listOrdersTest() {
         ResponseEntity<List<Order>> response = restTemplate.exchange(
-                "http://localhost:" + port + "/api/order",
+                "http://localhost:" + port + "/api/order/",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<>(){}
@@ -144,7 +144,7 @@ public class OrderControllerTest {
         HttpEntity<OrderDto> request = new HttpEntity<>(orderDto, headers);
 
         ResponseEntity<Order> response = restTemplate.exchange(
-                "http://localhost:" + port + "/api/order",
+                "http://localhost:" + port + "/api/order/",
                 HttpMethod.POST,
                 request,
                 Order.class
