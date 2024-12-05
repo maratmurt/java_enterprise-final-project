@@ -53,7 +53,11 @@ mvn -f delivery-service/pom.xml spring-boot:run
 ```
 
 ## Интерфейс
-Проверить работу эндпоинтов можно по следующим адресам:
+Проверить работу эндпоинтов можно следующим адресам:
+1. http://localhost:8080/api/order/swagger-ui/index.html
+2. http://localhost:8085/api/payment/swagger-ui/index.html
+3. http://localhost:8086/api/inventory/swagger-ui/index.html
+4. http://localhost:8083/auth/swagger-ui/index.html
 
 
 ## Тестирование

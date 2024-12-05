@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "Inventory API", version = "v1"),
-        servers = {@Server(url = "http://localhost:9090/inv"), @Server(url = "http://localhost:8086/inv")})
+        servers = {@Server(url = "http://localhost:9090/api/inventory"), @Server(url = "http://localhost:8086/api/inventory")})
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,

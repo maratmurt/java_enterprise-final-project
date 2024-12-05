@@ -22,11 +22,11 @@ springdoc:
       - name: auth
         url: /auth/v3/api-docs
       - name: order
-        url: /api/v3/api-docs
+        url: /api/order/v3/api-docs
       - name: payment
-        url: /pay/v3/api-docs
+        url: /api/payment/v3/api-docs
       - name: inventory
-        url: /inv/v3/api-docs
+        url: /api/inventory/v3/api-docs
 
 # could be used for debugging
 #logging:
