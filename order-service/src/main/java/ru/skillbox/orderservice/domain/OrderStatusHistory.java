@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "orders_status_history")
+@Table(name = "order_status_history")
 public class OrderStatusHistory {
 
     @Id
@@ -44,8 +44,12 @@ public class OrderStatusHistory {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public OrderStatusHistory(Long id, OrderStatus status, ServiceName serviceName, String comment, Order order) {
-        this.id = id;
+    public OrderStatusHistory(
+            OrderStatus status,
+            ServiceName serviceName,
+            String comment,
+            Order order
+    ) {
         this.status = status;
         this.serviceName = serviceName;
         this.comment = comment;

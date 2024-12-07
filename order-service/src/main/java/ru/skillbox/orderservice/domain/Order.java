@@ -14,14 +14,12 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "username")
@@ -76,6 +74,6 @@ public class Order {
     }
 
     public void addStatusHistory(OrderStatus status, ServiceName serviceName, String comment) {
-        getOrderStatusHistory().add(new OrderStatusHistory(null, status, serviceName, comment, this));
+        getOrderStatusHistory().add(new OrderStatusHistory(status, serviceName, comment, this));
     }
 }

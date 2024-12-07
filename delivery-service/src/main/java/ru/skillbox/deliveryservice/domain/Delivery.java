@@ -1,12 +1,16 @@
 package ru.skillbox.deliveryservice.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.skillbox.orderservice.domain.DeliveryStatus;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "delivery")
 public class Delivery {
 
@@ -28,4 +32,15 @@ public class Delivery {
     @Column(name = "status")
     private DeliveryStatus status;
 
+    public Delivery(
+            Long orderId,
+            String departureAddress,
+            String destinationAddress,
+            DeliveryStatus status
+    ) {
+        this.orderId = orderId;
+        this.departureAddress = departureAddress;
+        this.destinationAddress = destinationAddress;
+        this.status = status;
+    }
 }

@@ -1,4 +1,4 @@
-package ru.skillbox.authservice.dto;
+package ru.skillbox.authservice.domain;
 
 import lombok.Data;
 

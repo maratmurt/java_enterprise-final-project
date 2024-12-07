@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "auth_user_db")
+@Table(name = "users")
 public class User {
 
     @Id

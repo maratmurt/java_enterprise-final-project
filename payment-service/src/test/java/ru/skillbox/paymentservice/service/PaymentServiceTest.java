@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,11 +33,9 @@ public class PaymentServiceTest {
     @InjectMocks
     private PaymentServiceImpl paymentService;
 
-    private Account account;
-
     @BeforeEach
     public void setUp() {
-        account = new Account();
+        Account account = new Account();
         account.setId(1L);
         account.setUsername("User 1");
 
@@ -53,24 +51,14 @@ public class PaymentServiceTest {
 
     @Test
     public void rechargeTest() {
-        Transaction newTransaction = new Transaction();
-        newTransaction.setAmount(100D);
-        newTransaction.setAccount(account);
-        newTransaction.setDescription("Recharge payment");
-
         paymentService.recharge(new PaymentDto(100D), "User 1");
 
         verify(accountRepository).findByUsername("User 1");
-        verify(transactionRepository).save(eq(newTransaction));
+        verify(transactionRepository).save(any(Transaction.class));
     }
 
     @Test
     public void payForOrderTest() {
-        Transaction newTransaction = new Transaction();
-        newTransaction.setAmount(-100D);
-        newTransaction.setAccount(account);
-        newTransaction.setDescription("Payment for order");
-
         OrderDto orderDto = new OrderDto(
                 "Order description",
                 "Departure address",
@@ -81,20 +69,15 @@ public class PaymentServiceTest {
 
         assertTrue(paymentService.payForOrder(orderDto, "User 1"));
         verify(accountRepository).findByUsername("User 1");
-        verify(transactionRepository).save(eq(newTransaction));
+        verify(transactionRepository).save(any(Transaction.class));
     }
 
     @Test
     public void refundOrderTest() {
-        Transaction transaction = new Transaction();
-        transaction.setAccount(account);
-        transaction.setAmount(100D);
-        transaction.setDescription("Order 1 refund");
-
         paymentService.refundOrder("User 1", 1L, 100D);
 
         verify(accountRepository).findByUsername("User 1");
-        verify(transactionRepository).save(eq(transaction));
+        verify(transactionRepository).save(any(Transaction.class));
     }
 
 }

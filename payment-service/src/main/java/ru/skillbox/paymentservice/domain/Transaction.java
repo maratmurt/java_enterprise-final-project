@@ -1,12 +1,16 @@
 package ru.skillbox.paymentservice.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
-@Table(name = "transaction")
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
@@ -14,8 +18,8 @@ public class Transaction {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "account_id")
     @ManyToOne
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @Column(name = "amount")
@@ -24,4 +28,13 @@ public class Transaction {
     @Column(name = "description")
     private String description;
 
+    public Transaction(
+            Account account,
+            Double amount,
+            String description
+    ) {
+        this.account = account;
+        this.amount = amount;
+        this.description = description;
+    }
 }

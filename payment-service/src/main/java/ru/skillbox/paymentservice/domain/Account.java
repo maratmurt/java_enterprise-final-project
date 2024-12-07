@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name = "account")
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "accounts")
 public class Account {
 
     @Id
@@ -21,14 +23,21 @@ public class Account {
     private String username;
 
     @Transient
-    @EqualsAndHashCode.Exclude
     private Double balance;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     List<Transaction> transactions = new ArrayList<>();
+
+    public Account(
+            String username,
+            Double balance,
+            List<Transaction> transactions
+    ) {
+        this.username = username;
+        this.balance = balance;
+        this.transactions = transactions;
+    }
 
     public Double getBalance() {
         return transactions.stream()

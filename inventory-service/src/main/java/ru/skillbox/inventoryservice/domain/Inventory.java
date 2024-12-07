@@ -1,11 +1,15 @@
 package ru.skillbox.inventoryservice.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "inventory")
 public class Inventory {
 
@@ -24,4 +28,13 @@ public class Inventory {
     @Column(name = "description")
     private String description;
 
+    public Inventory(
+            Product product,
+            Integer quantity,
+            String description
+    ) {
+        this.product = product;
+        this.quantity = quantity;
+        this.description = description;
+    }
 }

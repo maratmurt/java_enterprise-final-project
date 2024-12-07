@@ -29,13 +29,13 @@ public class InventoryControllerTest extends InventoryServiceAppTest {
 
     @AfterEach
     public void afterEach() {
-        jdbcTemplate.execute("TRUNCATE TABLE product CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE products CASCADE");
     }
 
     @Test
     public void testReceipt() {
         jdbcTemplate.execute(
-                "INSERT INTO product (id, name) VALUES (1, 'Product 1')"
+                "INSERT INTO products (id, name) VALUES (1, 'Product 1')"
         );
 
         InventoryItemDto item = new InventoryItemDto();
@@ -71,7 +71,7 @@ public class InventoryControllerTest extends InventoryServiceAppTest {
         );
 
         String actualProductName = jdbcTemplate.queryForObject(
-                "SELECT name FROM product WHERE name = 'Product 1'",
+                "SELECT name FROM products WHERE name = 'Product 1'",
                 String.class
         );
 

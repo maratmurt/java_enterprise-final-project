@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.skillbox.authservice.dto.ErrorDto;
+import ru.skillbox.authservice.domain.ErrorDto;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
